@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Search Crop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <style>
+    body {
+            background-image: url("static/4k1.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+
+        h1 {
+            color: whitesmoke;
+            text-align: center;
+            padding: 11px;
+        }
+
+        .warning {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .card {
+            margin-top: 20px;
+            color: rgb(55, 241, 34);
+        }
+
+        .container {
+            background: rgb(178, 240, 161);
+            font-weight: bold;
+            padding-bottom: 10px;
+            border-radius: 10px;
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #333;
+            background-image: url("static/dark-mode-bg.jpg"); 
+        }
+
+        body.dark-mode h1,
+        body.dark-mode label,
+        body.dark-mode .card {
+            color: aqua;
+        }
+
+        body.dark-mode .container {
+            background: rgb(22, 22, 22); /* Same background color as the original mode */
+        }
+
+        
+
+
+        /* LED effect styles */
+        @keyframes glowing {
+            0% {
+                box-shadow: 0 0 5px aqua;
+            }
+
+            50% {
+                box-shadow: 0 0 20px aqua;
+            }
+
+            100% {
+                box-shadow: 0 0 5px aqua;
+            }
+        }
+
+        body.dark-mode .glow {
+            animation: glowing 1s infinite;
+        }
+
+        /* Box border animation styles */
+        .container.dark-mode {
+            animation: borderGlow 1s infinite;
+        }
+
+        @keyframes borderGlow {
+            0% {
+                border: 2px solid aqua;
+            }
+
+            50% {
+                border: 4px solid aqua;
+            }
+
+            100% {
+                border: 2px solid aqua;
+            }
+        }
+
+        /* Dark mode toggle button styles */
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 24px;
+            color: #fff;
+        }
+        .dark-mode-toggle:hover {
+            color: aqua;
+        }
+    </style>
+</head>
+
+<body>
+    <!--=======================navbar=====================================================-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Crop Recommendation</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/about" class="nav-link">About</a>
+                    </li>
+                </ul>
+            </div>
+            <i class="dark-mode-toggle fas fa-moon" onclick="toggleDarkMode()"></i>
+            <!-- <button id="darkModeBtn" class="btn btn-primary" style="background-color: green; color: white;">Toggle Dark Mode</button> -->
+        </div>
+    </nav>
+    
+    <!--==========================================================================================-->
+    <div class="container my-3 mt-5">
+        <h1 class="text-success">Crop Recommendation System <span class="text-success">🌱</span></h1>
+
+        <!-- Adding form and output in a responsive layout -->
+        <div class="row">
+            <div class="col-md-7">
+                <form action="/predict" method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="Nitrogen">Nitrogen</label>
+                            <input type="number" id="Nitrogen" name="Nitrogen" placeholder="Enter Nitrogen" class="form-control" required min="0" max="250">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="Phosporus">Phosporus</label>
+                            <input type="number" id="Phosporus" name="Phosporus" placeholder="Enter Phosporus" class="form-control" required min="0" max="250">
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <label for="Potassium">Potassium</label>
+                            <input type="number" id="Potassium" name="Potassium" placeholder="Enter Potassium" class="form-control" required min="0" max="250">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="Temperature">Temperature</label>
+                            <input type="number" step="0.01" id="Temperature" name="Temperature" placeholder="Enter Temperature in °C" class="form-control" required min="-20" max="60">
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <label for="Humidity">Humidity</label>
+                            <input type="number" step="0.01" id="Humidity" name="Humidity" placeholder="Enter Humidity in %" class="form-control" required min="0" max="100">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="pH">Potential hydrogen</label>
+                            <input type="number" step="0.01" id="Ph" name="Ph" placeholder="Enter pH value" class="form-control" required min="0" max="10">
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <label for="Rainfall">Rainfall</label>
+                            <input type="number" step="0.01" id="Rainfall" name="Rainfall" placeholder="Enter Rainfall in mm" class="form-control" required min="0" max="350">
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-12 text-center">
+                            <button type="submit" class="btn btn-primary btn-lg" style="background-color: #198754; color: white;">Get Result</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-5">
+                {% if results %}
+                    {% for result in results %}
+                    <div class="card bg-dark" style="width: 18rem;">
+                        {% if result.image_url %}
+                        <img src="{{ result.image_url }}" class="card-img-top" alt="{{ result.result }}">
+                        {% endif %}
+                        <div class="card-body" style="background-color: #2e2e2e;">
+                            <h6 class="card-title" style="color: white;">Recommend Crop for cultivation is:</h6>
+                            <p class="card-text">
+                                <!-- Wrap the crop name with a span and apply the color style -->
+                                {% set crop_name = result.result.split(' ')[0] %}
+                                {% set crop_rest = ' '.join(result.result.split(' ')[1:]) %}
+                                {{ crop_name }}<span style="color: rgb(255, 255, 255); font-weight: 400;"> {{ crop_rest }}</span>
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script>
+        function toggleDarkMode() {
+          const body = document.body;
+          body.classList.toggle('dark-mode');
+          // Save the user's preference in local storage
+          const isDarkMode = body.classList.contains('dark-mode');
+          localStorage.setItem('darkMode', isDarkMode);
+        }
+      
+        function onGetResultClick() {
+          const form = document.getElementById('cropForm');
+          form.classList.add('form-border-glow');
+      
+          // You can remove the border after a short delay (e.g., 1 second) if you want
+          setTimeout(() => {
+            form.classList.remove('form-border-glow');
+          }, 1000);
+        }
+      
+        // On page load, check if dark mode is already set
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+          document.body.classList.add('dark-mode');
+        }
+      
+        // Add an event listener to the 'Get Result' button
+        const getResultBtn = document.querySelector('.btn.btn-primary');
+        getResultBtn.addEventListener('click', onGetResultClick);
+      </script>
+      
+</body>
+
+</html>
